@@ -2,7 +2,7 @@
   "name": "reverjs",
   "version": "0.0.1",
   "description": "Board implementation for the game Reversi",
-  "main": "index.js",
+  "main": "src/board.js",
   "directories": {
     "doc": "docs"
   },
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/patrickbucher/reverjs/issues"
   },
-  "homepage": "https://github.com/patrickbucher/reverjs#readme"
+  "homepage": "https://github.com/patrickbucher/reverjs#readme",
+  "dependencies": {
+    "jest": "^24.9.0"
+  }
 }
