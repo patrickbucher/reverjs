@@ -1,0 +1,27 @@
+{
+  "name": "reverjs",
+  "version": "0.0.1",
+  "description": "Board implementation for the game Reversi",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrickbucher/reverjs.git"
+  },
+  "keywords": [
+    "Reversi",
+    "Game",
+    "Board"
+  ],
+  "author": "Patrick Bucher",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/patrickbucher/reverjs/issues"
+  },
+  "homepage": "https://github.com/patrickbucher/reverjs#readme"
+}
