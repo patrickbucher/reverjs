@@ -6,6 +6,13 @@ const empty = 0;
 const black = 1;
 const white = 2;
 
+const initRowColPlayer = [
+    [3, 3, white],
+    [3, 4, black],
+    [4, 4, white],
+    [4, 3, black]
+];
+
 class Board {
 
     constructor() {
@@ -16,6 +23,9 @@ class Board {
                 row.push(empty);
             }
             fields.push(row);
+        }
+        for (let [row, col, val] of initRowColPlayer) {
+            fields[row][col] = val;
         }
         this.fields = fields;
     }
