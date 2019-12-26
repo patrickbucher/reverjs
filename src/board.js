@@ -6,29 +6,42 @@ const dimension = 8;
 // empty represents an empty field.
 const empty = 0;
 
-// black represents a field belonging to the black player.
-const black = 1;
+// one represents a field belonging to the first player.
+const one = 1;
 
-// white represents a field belonging to the white player.
-const white = 2;
+// two represents a field belonging to the second player.
+const two = 2;
 
 // initRowColPlayer is an array of the initial game position, which is used for
 // the board initialization.
 const initRowColPlayer = [
-    [3, 3, white],
-    [3, 4, black],
-    [4, 4, white],
-    [4, 3, black]
+    [3, 3, two],
+    [3, 4, one],
+    [4, 4, two],
+    [4, 3, one],
+];
+
+// shifts is a map of [row, col] shift array for all possible directions on the
+// board.
+const shifts = [
+    [-1, 0],
+    [-1, 1],
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1],
 ];
 
 // Board is a board for the game Reversi, which consists of fields arranged as
-// n rows and n columns (usually 8x8). The fields are either empty, black
-// (value 1), or white (value 2).
+// n rows and n columns (usually 8x8). The fields are either empty, one
+// (value 1), or two (value 2).
 class Board {
 
     // constructor creates a new board with the initial game position, i.e.
     // all fields are empty, expect the four fields in the middle, which are
-    // set to black or white (initial position).
+    // set to one or two (initial position).
     constructor() {
         let fields = new Array();
         for (let r = 0; r < dimension; r++) {
@@ -59,7 +72,7 @@ class Board {
                 throw new RangeError(`row requires ${dimension} cols`);
             }
             for (let c = 0; c < dimension; c++) {
-                if (row[c] != empty && row[c] != black && row[c] != white) {
+                if (row[c] != empty && row[c] != one && row[c] != two) {
                     throw new RangeError(`illegal value ${row[c]} ([${r}/${c}])`);
                 }
             }
@@ -68,10 +81,64 @@ class Board {
         return board;
     }
 
-    // getFieldsWithState returns all the field indices as an array with
-    // elements in the form [row, column] that have the given state as their
-    // value.
-    getFieldsWithState(state) {
+    // validMoves returns all moves that are valid for the given player on the
+    // current board. The moves are returned as an array of [row, col] arrays.
+    validMoves(player) {
+        const validMoves = new Set([]);
+        const emptyFields = this.fieldsWithState(empty);
+        const otherPlayer = this.opponent(player);
+        const neighbourships = this.adjacentOf(emptyFields, otherPlayer);
+        for (const candidate of neighbourships) {
+            // search from adjacent field into shift direction
+            let shift = candidate.shift;
+            for (let field = candidate.adjacent;
+                field[0] >= 0 && field[0] < dimension && field[1] >= 0 && field[1] < dimension;
+                field[0] += shift[0], field[1] += shift[1]) {
+                console.log(field);
+                if (field == player) {
+                    // if own field is found, the move is valid
+                    validMoves.push(candidate.original);
+                    break;
+                } else if (field == empty) {
+                    // empty field found: do not search any further
+                    break
+                }
+            }
+        }
+        return validMoves;
+    }
+
+    // adjacentOf returns all adjacent fields of the given fields that have the
+    // given state. The fields are returned as a map consisting of:
+    // 1) the original field from fields
+    // 2) the adjacent field with the given state
+    // 3) the shift applied in order to get from 1) to 2)
+    adjacentOf(fields, state) {
+        const adjacents = [];
+        for (const field of fields) {
+            const [r, c] = field;
+            for (const shift of shifts) {
+                const [newRow, newCol] = [r + shift[0], c + shift[1]];
+                if (newRow < 0 || newRow >= dimension ||
+                    newCol < 0 || newCol >= dimension) {
+                    // out of board bounds, ignore direction
+                    continue; 
+                }
+                if (this.fields[newRow][newCol] == state) {
+                    adjacents.push({
+                        original: [r, c],
+                        adjacent: [newRow, newCol],
+                        shift: shift,
+                    });
+                }
+            }
+        }
+        return adjacents;
+    }
+
+    // fieldsWithState returns all the field indices as an array with elements
+    // in the form [row, column] that have the given state as their value.
+    fieldsWithState(state) {
         const fields = [];
         for (const row in this.fields) {
             for (const col in this.fields[row]) {
@@ -86,10 +153,10 @@ class Board {
     // opponent determines the opponent of the given player. If an illegal
     // player value is given (i.e. not equal 1 or 2), a RangeError is thrown.
     opponent(player) {
-        if (player == black) {
-            return white;
-        } else if (player == white) {
-            return black;
+        if (player == one) {
+            return two;
+        } else if (player == two) {
+            return one;
         }
         throw RangeError(`illegal player ${player}`);
     }

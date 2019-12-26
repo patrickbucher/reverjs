@@ -68,44 +68,49 @@ it('create board with illegal field values', () => {
     }).toThrow(exception);
 });
 
-it('find black fields on initial board', () => {
+it('find one fields on initial board', () => {
     const board = new Board();
-    expect(board.getFieldsWithState(1)).toEqual([[3, 4], [4, 3]]);
+    expect(board.fieldsWithState(1)).toEqual([[3, 4], [4, 3]]);
 });
 
-it('find white fields on initial board', () => {
+it('find two fields on initial board', () => {
     const board = new Board();
-    expect(board.getFieldsWithState(2)).toEqual([[3, 3], [4, 4]]);
+    expect(board.fieldsWithState(2)).toEqual([[3, 3], [4, 4]]);
 });
 
-it('find black fields after two moves', () => {
+it('find initial valid moves for player one', () => {
+    const board = new Board();
+    expect(board.validMoves(1)).toEqual(new Set([[2, 3], [3, 2], [5, 4], [4, 5]]));
+});
+
+it('find one fields after two moves', () => {
     const board = Board.of(boardAfterTwoMoves);
-    expect(board.getFieldsWithState(1)).toEqual([
+    expect(board.fieldsWithState(1)).toEqual([
         [3, 2], [3, 3], [4, 3]
     ]);
 });
 
-it('find white fields after two moves', () => {
+it('find two fields after two moves', () => {
     const board = Board.of(boardAfterTwoMoves);
-    expect(board.getFieldsWithState(2)).toEqual([
+    expect(board.fieldsWithState(2)).toEqual([
         [2, 4], [3, 4], [4, 4]
     ]);
 });
 
-it('find opponent of black player', () => {
+it('find opponent of player one', () => {
     const board = new Board();
-    const blackPlayer = 1;
-    const whitePlayer = 2;
-    const opponent = board.opponent(blackPlayer);
-    expect(opponent).toEqual(whitePlayer);
+    const playerOne = 1;
+    const playerTwo = 2;
+    const opponent = board.opponent(playerOne);
+    expect(opponent).toEqual(playerTwo);
 });
 
-it('find opponent of black player', () => {
+it('find opponent of player one', () => {
     const board = new Board();
-    const blackPlayer = 1;
-    const whitePlayer = 2;
-    const opponent = board.opponent(whitePlayer);
-    expect(opponent).toEqual(blackPlayer);
+    const playerOne = 1;
+    const playerTwo = 2;
+    const opponent = board.opponent(playerTwo);
+    expect(opponent).toEqual(playerOne);
 });
 
 it('find opponent of illegal player', () => {
