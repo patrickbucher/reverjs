@@ -29,6 +29,45 @@ it('create initial board', () => {
     expect(board.fields).toEqual(initialBoard);
 });
 
+it('create board with wrong number of rows', () => {
+    const fields = [
+        // too few rows
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const exception = new RangeError(`fields requires 8 rows`);
+    expect(() => {
+        Board.of(fields)
+    }).toThrow(exception);
+});
+
+it('create board with wrong number of columns', () => {
+    const fields = [
+        // too few cols
+        [0], [0], [0], [0], [0], [0], [0], [0],
+    ];
+    const exception = new RangeError(`row requires 8 cols`);
+    expect(() => {
+        Board.of(fields)
+    }).toThrow(exception);
+});
+
+it('create board with illegal field values', () => {
+    const fields = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 3, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const exception = new RangeError(`illegal value 3 ([6/5])`)
+    expect(() => {
+        Board.of(fields)
+    }).toThrow(exception);
+});
+
 it('find black fields on initial board', () => {
     const board = new Board();
     expect(board.getFieldsWithState(1)).toEqual([[3, 4], [4, 3]]);
