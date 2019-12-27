@@ -143,7 +143,7 @@ class Board {
             // if own stone found, set all fields in chain to own fields
             // if enemy stone found, add to chain and look further
         });
-        return newBoard();
+        return newBoard;
     }
 
     // copy creates and returns a copy of the current board.
