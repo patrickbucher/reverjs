@@ -136,12 +136,27 @@ class Board {
         }
         const otherPlayer = this.opponent(player);
         const newBoard = this.copy();
+        newBoard.fields[row][col] = player;
         shifts.forEach(shift => {
             const chain = [];
-            // TODO: start at [row/col], go into shift direction
-            // if empty stone found, clear chain and break
-            // if own stone found, set all fields in chain to own fields
-            // if enemy stone found, add to chain and look further
+            for (let field = [row + shift[0], col + shift[1]];
+                field[0] >= 0 && field[0] < dimension && field[1] >= 0 && field[1] < dimension;
+                field[0] += shift[0], field[1] += shift[1]) {
+                const fieldValue = newBoard.fields[field[0]][field[1]];
+                if (fieldValue == otherPlayer) {
+                    // opponent's field: mark for takeover
+                    chain.push([field[0], field[1]]);
+                } else if (fieldValue == player) {
+                    // own field at the end of the chain: take over fields
+                    for (const [r, c] of chain) {
+                        newBoard.fields[r][c] = player;
+                    }
+                    break;
+                } else {
+                    // empty field: nothing to capture in this direction
+                    break;
+                }
+            }
         });
         return newBoard;
     }
