@@ -270,6 +270,106 @@ it('play legal move in fictional setting', () => {
     expect(board.play(3, 4, 2).fields).toEqual(expected);
 });
 
+it('get result for initial state', () => {
+    const board = new Board();
+    const expected = {
+        playerOne: 2,
+        playerTwo: 2,
+        finished: false,
+        tied: false,
+        winner: 0,
+    };
+    expect(board.result()).toEqual(expected);
+});
+
+it('get result for almost finished state', () => {
+    const fields = [
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [2, 1, 1, 1, 0, 1, 1, 2],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+    ];
+    const board = Board.of(fields);
+    const expected = {
+        playerOne: 35,
+        playerTwo: 28,
+        finished: false,
+        tied: false,
+        winner: 0,
+    };
+    expect(board.result()).toEqual(expected);
+});
+
+it('get result for finished state (player one wins)', () => {
+    const fields = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1],
+        [1, 2, 2, 1, 1, 1, 2, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 2, 1, 1, 1, 2, 1],
+        [1, 2, 1, 2, 1, 2, 1, 1],
+        [1, 1, 2, 2, 1, 2, 2, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const board = Board.of(fields);
+    const expected = {
+        playerOne: 48,
+        playerTwo: 16,
+        finished: true,
+        tied: false,
+        winner: 1,
+    };
+    expect(board.result()).toEqual(expected);
+});
+
+it('get result for finished state (player two wins)', () => {
+    const fields = [
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 1, 2, 1, 2, 1, 2, 2],
+        [2, 1, 1, 2, 2, 2, 1, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 1, 1, 2, 2, 2, 1, 2],
+        [2, 1, 2, 1, 2, 1, 2, 2],
+        [2, 2, 1, 1, 2, 1, 1, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+    ];
+    const board = Board.of(fields);
+    const expected = {
+        playerOne: 16,
+        playerTwo: 48,
+        finished: true,
+        tied: false,
+        winner: 2,
+    };
+    expect(board.result()).toEqual(expected);
+});
+
+it('get result for tied state', () => {
+    const fields = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+    ];
+    const board = Board.of(fields);
+    const expected = {
+        playerOne: 32,
+        playerTwo: 32,
+        finished: true,
+        tied: true,
+        winner: 0,
+    }
+    expect(board.result()).toEqual(expected);
+});
+
 it('create copy of initial board', () => {
     const board = new Board();
     const copy = board.copy();

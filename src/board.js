@@ -161,6 +161,38 @@ class Board {
         return newBoard;
     }
 
+    // result returns the standing of the board with further indications on the
+    // game's result. An object with the following properties is returned:
+    // - playerOne: number of fields captured by player one
+    // - playerTwo: number of fields captured by player two
+    // - finished: true, if the game is finished (i.e. no more empty fields), false otherwise
+    // - tied: true, if the game is finished, and both players have the same number of fields captured
+    // - winner: 1, if player one won; 2, if player two won; and 0, if nobody won (not finished or tied)
+    result() {
+        const emptyFields = this.fieldsWithState(empty);
+        const playerOneFields = this.fieldsWithState(one);
+        const playerTwoFields = this.fieldsWithState(two);
+        const finished = emptyFields.length == 0;
+        let tied = false;
+        let winner = 0;
+        if (finished) {
+            if (playerOneFields.length > playerTwoFields.length) {
+                winner = one;
+            } else if (playerOneFields.length < playerTwoFields.length) {
+                winner = two;
+            } else {
+                tied = true;
+            }
+        }
+        return {
+            playerOne: playerOneFields.length,
+            playerTwo: playerTwoFields.length,
+            finished: finished,
+            tied: tied,
+            winner: winner,
+        };
+    }
+
     // copy creates and returns a copy of the current board.
     copy() {
         let rows = [];
