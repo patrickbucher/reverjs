@@ -260,4 +260,8 @@ class Board {
     }
 }
 
-module.exports = Board;
+try {
+    module.exports = Board;
+} catch (RefrenceError) {
+    console.log('module is not defined');
+}

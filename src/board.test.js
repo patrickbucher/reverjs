@@ -170,6 +170,21 @@ it('play legal first move with player one', () => {
     expect(board.play(2, 3, 1).fields).toEqual(expected);
 });
 
+it('play another legal first move with player one', () => {
+    const board = new Board();
+    const expected = [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    expect(board.play(3, 2, 1).fields).toEqual(expected);
+});
+
 it('play legal second move with player two', () => {
     const before = [
         [0, 0, 0, 0, 0, 0, 0, 0],
