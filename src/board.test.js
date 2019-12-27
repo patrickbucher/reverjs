@@ -68,12 +68,12 @@ it('create board with illegal field values', () => {
     }).toThrow(exception);
 });
 
-it('find one fields on initial board', () => {
+it('find player one fields on initial board', () => {
     const board = new Board();
     expect(board.fieldsWithState(1)).toEqual([[3, 4], [4, 3]]);
 });
 
-it('find two fields on initial board', () => {
+it('find player two fields on initial board', () => {
     const board = new Board();
     expect(board.fieldsWithState(2)).toEqual([[3, 3], [4, 4]]);
 });
@@ -83,14 +83,47 @@ it('find initial valid moves for player one', () => {
     expect(board.validMoves(1)).toEqual(new Set([[2, 3], [3, 2], [5, 4], [4, 5]]));
 });
 
-it('find one fields after two moves', () => {
+const compareNeighbourships = (a, b) => {
+    const sum = (e) => {
+        const o = e.original;
+        const s = e.shift;
+        const a = e.adjacent;
+        return Number(`1${o[0]}${o[1]}${s[0]+1}${s[1]+1}${a[0]}${a[1]}`);
+    };
+    const sumA = sum(a);
+    const sumB = sum(b);
+    return sumA - sumB;
+};
+
+it('find empty fields adjacent to player one fields', () => {
+    const board = new Board();
+    const emptyFields = board.fieldsWithState(0);
+    const neighbourships = board.adjacentOf(emptyFields, 1);
+    const expected = [
+        {original: [2, 3], shift: [+1, +1], adjacent: [3, 4]},
+        {original: [2, 4], shift: [+1, +0], adjacent: [3, 4]},
+        {original: [2, 5], shift: [+1, -1], adjacent: [3, 4]},
+        {original: [3, 5], shift: [+0, -1], adjacent: [3, 4]},
+        {original: [4, 5], shift: [-1, -1], adjacent: [3, 4]},
+        {original: [3, 2], shift: [+1, +1], adjacent: [4, 3]},
+        {original: [4, 2], shift: [+0, +1], adjacent: [4, 3]},
+        {original: [5, 2], shift: [-1, +1], adjacent: [4, 3]},
+        {original: [5, 3], shift: [-1, +0], adjacent: [4, 3]},
+        {original: [5, 4], shift: [-1, -1], adjacent: [4, 3]},
+    ];
+    neighbourships.sort(compareNeighbourships);
+    expected.sort(compareNeighbourships);
+    expect(neighbourships).toEqual(expected);
+});
+
+it('find player one fields after two moves', () => {
     const board = Board.of(boardAfterTwoMoves);
     expect(board.fieldsWithState(1)).toEqual([
         [3, 2], [3, 3], [4, 3]
     ]);
 });
 
-it('find two fields after two moves', () => {
+it('find player two fields after two moves', () => {
     const board = Board.of(boardAfterTwoMoves);
     expect(board.fieldsWithState(2)).toEqual([
         [2, 4], [3, 4], [4, 4]

@@ -24,14 +24,14 @@ const initRowColPlayer = [
 // shifts is a map of [row, col] shift array for all possible directions on the
 // board.
 const shifts = [
-    [-1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
-    [1, 0],
-    [1, -1],
-    [0, -1],
-    [-1, -1],
+    [-1, +0], // north
+    [-1, +1], // north east
+    [+0, +1], // east
+    [+1, +1], // south east
+    [+1, +0], // south
+    [+1, -1], // south west
+    [+0, -1], // west
+    [-1, -1], // north west
 ];
 
 // Board is a board for the game Reversi, which consists of fields arranged as
@@ -87,21 +87,22 @@ class Board {
         const validMoves = new Set([]);
         const emptyFields = this.fieldsWithState(empty);
         const otherPlayer = this.opponent(player);
-        const neighbourships = this.adjacentOf(emptyFields, otherPlayer);
-        for (const candidate of neighbourships) {
+        const emptyFieldsNextToOpponent = this.adjacentOf(emptyFields, otherPlayer);
+        for (const candidate of emptyFieldsNextToOpponent) {
             // search from adjacent field into shift direction
-            let shift = candidate.shift;
+            const shift = candidate.shift;
             for (let field = candidate.adjacent;
                 field[0] >= 0 && field[0] < dimension && field[1] >= 0 && field[1] < dimension;
                 field[0] += shift[0], field[1] += shift[1]) {
-                console.log(field);
-                if (field == player) {
-                    // if own field is found, the move is valid
-                    validMoves.push(candidate.original);
-                    break;
-                } else if (field == empty) {
+                const fieldValue = this.fields[field[0]][field[1]];
+                if (fieldValue == empty) {
                     // empty field found: do not search any further
-                    break
+                    break;
+                }
+                if (fieldValue == player) {
+                    // if own field is found in shift direction, the move is valid
+                    validMoves.add(candidate.original);
+                    break;
                 }
             }
         }
@@ -127,8 +128,8 @@ class Board {
                 if (this.fields[newRow][newCol] == state) {
                     adjacents.push({
                         original: [r, c],
-                        adjacent: [newRow, newCol],
                         shift: shift,
+                        adjacent: [newRow, newCol],
                     });
                 }
             }
