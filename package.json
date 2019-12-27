@@ -1,6 +1,6 @@
 {
   "name": "reverjs",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Board implementation for the game Reversi",
   "main": "src/board.js",
   "directories": {
@@ -19,7 +19,7 @@
     "Board"
   ],
   "author": "Patrick Bucher",
-  "license": "GPL-3.0-or-later",
+  "license": "LGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/patrickbucher/reverjs/issues"
   },
