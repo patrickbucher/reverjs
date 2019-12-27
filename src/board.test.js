@@ -98,6 +98,75 @@ it('find valid moves after two moves for player two', () => {
     expect(board.validMoves(2)).toEqual(new Set([[2, 2], [3, 1], [4, 2], [5, 2]]));
 });
 
+it('find valid moves for illegal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`illegal player 3`);
+    expect(() => {
+        board.validMoves(3);
+    }).toThrow(exception);
+});
+
+it('play illegal move (row too low) with legal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`move [-1/0] is out of bounds`);
+    expect(() => {
+        board.play(-1, 0, 1);
+    }).toThrow(exception);
+});
+
+it('play illegal move (row too high) with legal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`move [9/0] is out of bounds`);
+    expect(() => {
+        board.play(9, 0, 1);
+    }).toThrow(exception);
+});
+
+it('play illegal move (col too low) with legal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`move [0/-1] is out of bounds`);
+    expect(() => {
+        board.play(0, -1, 1);
+    }).toThrow(exception);
+});
+
+it('play illegal move (col too high) with legal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`move [0/9] is out of bounds`);
+    expect(() => {
+        board.play(0, 9, 1);
+    }).toThrow(exception);
+});
+
+it('play legal move with illegal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`illegal player 7`);
+    expect(() => {
+        board.play(3, 4, 7);
+    }).toThrow(exception);
+});
+
+it('play invalid move for legal player', () => {
+    const board = new Board();
+    const exception = new RangeError(`move [2/3] is not valid for player 2`);
+    expect(() => {
+        // legal for player 1, not for 2
+        board.play(2, 3, 2);
+    }).toThrow(exception);
+});
+
+it('play legal move with legal player', () => {
+    const board = new Board();
+    board.play(2, 3, 1);
+});
+
+it('create copy of initial board', () => {
+    const board = new Board();
+    const copy = board.copy();
+    expect(board === copy).toBeFalsy(); // different instance
+    expect(board.fields).toEqual(copy.fields); // same values
+});
+
 const compareNeighbourships = (a, b) => {
     const sum = (e) => {
         const o = e.original;

@@ -84,6 +84,9 @@ class Board {
     // validMoves returns all moves that are valid for the given player on the
     // current board. The moves are returned as an array of [row, col] arrays.
     validMoves(player) {
+        if (player != one && player != two) {
+            throw new RangeError(`illegal player ${player}`);
+        }
         const validMoves = [];
         const emptyFields = this.fieldsWithState(empty);
         const otherPlayer = this.opponent(player);
@@ -114,6 +117,37 @@ class Board {
             return new Set(unique.values());
         };
         return dedup(validMoves);
+    }
+
+    // play applies the move for the player and returns a new board instance
+    // with all the fields modified accordingly. If the move is not valid, a
+    // RangeError is thrown.
+    play(row, col, player) {
+        if (player != one && player != two) {
+            throw new RangeError(`illegal player ${player}`);
+        }
+        if (row < 0 || row >= dimension || col < 0 || col >= dimension) {
+            throw new RangeError(`move [${row}/${col}] is out of bounds`);
+        }
+        const validMoves = this.validMoves(player);
+        const match = [...validMoves].filter(move => move[0] == row && move[1] == col);
+        if (match.length < 1) {
+            throw new RangeError(`move [${row}/${col}] is not valid for player ${player}`);
+        }
+        // TODO: validation ok, now apply the move on the copy
+    }
+
+    // copy creates and returns a copy of the current board.
+    copy() {
+        let rows = [];
+        for (let row = 0; row < dimension; row++) {
+            let cols = [];
+            for (let col = 0; col < dimension; col++) {
+                cols.push(this.fields[row][col]);
+            }
+            rows.push(cols);
+        }
+        return Board.of(rows);
     }
 
     // adjacentOf returns all adjacent fields of the given fields that have the
