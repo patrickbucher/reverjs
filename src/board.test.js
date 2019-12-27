@@ -88,6 +88,16 @@ it('find initial valid moves for player two', () => {
     expect(board.validMoves(2)).toEqual(new Set([[2, 4], [3, 5], [4, 2], [5, 3]]));
 });
 
+it('find valid moves after two moves for player one', () => {
+    const board = Board.of(boardAfterTwoMoves);
+    expect(board.validMoves(1)).toEqual(new Set([[1, 5], [2, 5], [3, 5], [4, 5], [5, 5]]));
+});
+
+it('find valid moves after two moves for player two', () => {
+    const board = Board.of(boardAfterTwoMoves);
+    expect(board.validMoves(2)).toEqual(new Set([[2, 2], [3, 1], [4, 2], [5, 2]]));
+});
+
 const compareNeighbourships = (a, b) => {
     const sum = (e) => {
         const o = e.original;

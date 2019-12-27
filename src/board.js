@@ -84,7 +84,7 @@ class Board {
     // validMoves returns all moves that are valid for the given player on the
     // current board. The moves are returned as an array of [row, col] arrays.
     validMoves(player) {
-        const validMoves = new Set([]);
+        const validMoves = [];
         const emptyFields = this.fieldsWithState(empty);
         const otherPlayer = this.opponent(player);
         const emptyFieldsNextToOpponent = this.adjacentOf(emptyFields, otherPlayer);
@@ -101,12 +101,28 @@ class Board {
                 }
                 if (fieldValue == player) {
                     // if own field is found in shift direction, the move is valid
-                    validMoves.add(candidate.original);
+                    validMoves.push(candidate.original);
                     break;
                 }
             }
         }
-        return validMoves;
+        const dedup = (list) => {
+            const unique = [];
+            for (const e of list) {
+                let add = true;
+                for (const u of unique) {
+                    if (u[0] == e[0] && u[1] == e[1]) {
+                        add = false;
+                        break
+                    }
+                }
+                if (add) {
+                    unique.push(e);
+                }
+            }
+            return new Set(unique);
+        };
+        return dedup(validMoves);
     }
 
     // adjacentOf returns all adjacent fields of the given fields that have the
