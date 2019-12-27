@@ -106,21 +106,12 @@ class Board {
                 }
             }
         }
-        const dedup = (list) => {
-            const unique = [];
-            for (const e of list) {
-                let add = true;
-                for (const u of unique) {
-                    if (u[0] == e[0] && u[1] == e[1]) {
-                        add = false;
-                        break
-                    }
-                }
-                if (add) {
-                    unique.push(e);
-                }
-            }
-            return new Set(unique);
+        // NOTE: Sets are unique by reference, not by value; de-duplicate using a Map.
+        const dedup = (moves) => {
+            const identify = (move) => `${move[0]}:${move[1]}`;
+            const unique = new Map();
+            moves.forEach(move => unique.set(identify(move), move));
+            return new Set(unique.values());
         };
         return dedup(validMoves);
     }
