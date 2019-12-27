@@ -43,9 +43,9 @@ class Board {
     // all fields are empty, expect the four fields in the middle, which are
     // set to one or two (initial position).
     constructor() {
-        let fields = new Array();
+        let fields = [];
         for (let r = 0; r < dimension; r++) {
-            let row = new Array();
+            let row = [];
             for (let c = 0; c < dimension; c++) {
                 row.push(empty);
             }
@@ -134,7 +134,16 @@ class Board {
         if (match.length < 1) {
             throw new RangeError(`move [${row}/${col}] is not valid for player ${player}`);
         }
-        // TODO: validation ok, now apply the move on the copy
+        const otherPlayer = this.opponent(player);
+        const newBoard = this.copy();
+        shifts.forEach(shift => {
+            const chain = [];
+            // TODO: start at [row/col], go into shift direction
+            // if empty stone found, clear chain and break
+            // if own stone found, set all fields in chain to own fields
+            // if enemy stone found, add to chain and look further
+        });
+        return newBoard();
     }
 
     // copy creates and returns a copy of the current board.
