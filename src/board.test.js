@@ -103,6 +103,7 @@ const compareNeighbourships = (a, b) => {
         const o = e.original;
         const s = e.shift;
         const a = e.adjacent;
+        // numeric representation of original, shift, and adjacent for sorting
         return Number(`1${o[0]}${o[1]}${s[0]+1}${s[1]+1}${a[0]}${a[1]}`);
     };
     const sumA = sum(a);
@@ -153,7 +154,7 @@ it('find opponent of player one', () => {
     expect(opponent).toEqual(playerTwo);
 });
 
-it('find opponent of player one', () => {
+it('find opponent of player two', () => {
     const board = new Board();
     const playerOne = 1;
     const playerTwo = 2;

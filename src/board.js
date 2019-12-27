@@ -51,9 +51,9 @@ class Board {
             }
             fields.push(row);
         }
-        for (let [row, col, val] of initRowColPlayer) {
+        initRowColPlayer.forEach(([row, col, val]) => {
             fields[row][col] = val;
-        }
+        });
         this.fields = fields;
     }
 
@@ -88,7 +88,7 @@ class Board {
         const emptyFields = this.fieldsWithState(empty);
         const otherPlayer = this.opponent(player);
         const emptyFieldsNextToOpponent = this.adjacentOf(emptyFields, otherPlayer);
-        for (const candidate of emptyFieldsNextToOpponent) {
+        emptyFieldsNextToOpponent.forEach((candidate) => {
             // search from adjacent field into shift direction
             const shift = candidate.shift;
             for (let field = candidate.adjacent;
@@ -105,7 +105,7 @@ class Board {
                     break;
                 }
             }
-        }
+        });
         // NOTE: Sets are unique by reference, not by value; de-duplicate using a Map.
         const dedup = (moves) => {
             const identify = (move) => `${move[0]}:${move[1]}`;
@@ -123,7 +123,7 @@ class Board {
     // 3) the shift applied in order to get from 1) to 2)
     adjacentOf(fields, state) {
         const adjacents = [];
-        for (const field of fields) {
+        fields.forEach(field => {
             const [r, c] = field;
             for (const shift of shifts) {
                 const [newRow, newCol] = [r + shift[0], c + shift[1]];
@@ -140,7 +140,7 @@ class Board {
                     });
                 }
             }
-        }
+        });
         return adjacents;
     }
 
