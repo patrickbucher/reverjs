@@ -72,7 +72,7 @@ class Board {
                 throw new RangeError(`row requires ${dimension} cols`);
             }
             for (let c = 0; c < dimension; c++) {
-                if (row[c] != empty && row[c] != one && row[c] != two) {
+                if (row[c] !== empty && row[c] !== one && row[c] !== two) {
                     throw new RangeError(`illegal value ${row[c]} ([${r}/${c}])`);
                 }
             }
@@ -84,7 +84,7 @@ class Board {
     // validMoves returns all moves that are valid for the given player on the
     // current board. The moves are returned as an array of [row, col] arrays.
     validMoves(player) {
-        if (player != one && player != two) {
+        if (player !== one && player !== two) {
             throw new RangeError(`illegal player ${player}`);
         }
         const validMoves = [];
@@ -123,8 +123,11 @@ class Board {
     // with all the fields modified accordingly. If the move is not valid, a
     // RangeError is thrown.
     play(row, col, player) {
-        if (player != one && player != two) {
+        if (player !== one && player !== two) {
             throw new RangeError(`illegal player ${player}`);
+        }
+        if (typeof row != 'number' || typeof col != 'number') {
+            throw new TypeError('row and col must be numbers');
         }
         if (row < 0 || row >= dimension || col < 0 || col >= dimension) {
             throw new RangeError(`move [${row}/${col}] is out of bounds`);
@@ -260,8 +263,4 @@ class Board {
     }
 }
 
-try {
-    module.exports = Board;
-} catch (RefrenceError) {
-    console.log('module is not defined');
-}
+module.exports = Board;

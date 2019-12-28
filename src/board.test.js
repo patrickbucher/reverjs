@@ -106,6 +106,14 @@ it('find valid moves for illegal player', () => {
     }).toThrow(exception);
 });
 
+it('play illegal move (row and col not numeric)', () => {
+    const board = new Board();
+    const exception = new TypeError('row and col must be numbers');
+    expect(() => {
+        board.play('2', '3', 1);
+    }).toThrow(exception);
+});
+
 it('play illegal move (row too low) with legal player', () => {
     const board = new Board();
     const exception = new RangeError(`move [-1/0] is out of bounds`);
