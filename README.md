@@ -4,6 +4,12 @@ Implementation of a Reversi board in vanilla JavaScript.
 
 ## How to Use
 
+Install `reverjs` package from [npm](https://www.npmjs.com/package/reverjs):
+
+```bash
+$ npm install reverjs --save reverjs
+```
+
 Create a new board with initial state:
 
 ```javascript
